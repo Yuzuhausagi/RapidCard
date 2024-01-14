@@ -17,20 +17,20 @@ def read_root():
 def health(request: Request, test_param_example: str):
     return {"example": test_param_example}
 
-
-@app.get("/test", response_class=HTMLResponse)
-async def read_item(request: Request):
-    my_list = ["apple", "pear", "please work?"]
-    return {"example": "asdasdasd"}
-    # return templates.TemplateResponse(
-    #     request=request, name="test.html", context={"myList": my_list}
-    # )
-
+@dataclasses
+class GuessWord:
+    word: str
+    answer: str
+    guesses: list
 
 @app.get("/items/{id}", response_class=HTMLResponse)
 async def read_item(request: Request, id: str):
     print(id)
-    my_list = ["apple", "pear", "please work?"]
+    guess_word = "example word"
+    # car, up, down, samurai, family, right, left, lover/girlfriend/boyfriend/sweetheart,flame,
+    japanese_words = ["車", "上", "下", "侍", "家族", "右", "左", "恋人", "炎", "銀行"]
+    dict = {}
+    guess_options = [dict[id], ]
     return templates.TemplateResponse(
-        request=request, name="item.html", context={"id": id, "my": my_list}
+        request=request, name="item.html", context={"id": id, "guess_options": guess_options}
     )

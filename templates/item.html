@@ -5,15 +5,14 @@
 </head>
 <body>
     <h1>
-        <a href="{{url_for('read_item', id=my) }}">Item ID: {{ id }}</a>
+        <a href="{{url_for('read_item', id=id) }}">Item ID: {{ id }}</a>
     </h1>
+    <div>
+        <h2>{{id}}</h2>
+    </div>
     <ul>
-    {% for item in id %}
-        <li>
-            <p>
-                asd
-            </p>
-        </li>
+    {% for item in guess_options %}
+                <button onclick="console.log('{{item}}')" >{{item}}</button>
     {% endfor %}
     </ul>
 
