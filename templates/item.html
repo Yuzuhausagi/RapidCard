@@ -1,4 +1,17 @@
 <html>
+<script>
+    const makeGuess = async (guess, word) => {
+        fetch(`/api/guess/${word}/${guess}`).then(async (res) => {
+            myObject = await res.json()
+            const currentButton = document.getElementById(guess)
+
+            const color = myObject.isCorrect ? "green" : "red"
+            currentButton.style.color = color
+        })
+        
+    }
+
+</script>
 <head>
     <title>Item Details</title>
     <link href="{{ url_for('static', path='/style.css') }}" rel="stylesheet">
@@ -12,9 +25,9 @@
     </div>
     <ul>
     {% for item in guess_options %}
-                <button onclick="console.log('{{item}}')"> {{item}} </button>
+        <button id={{item}} onclick="makeGuess('{{item}}', '{{test_word}}')"> {{item}} </button>
     {% endfor %}
-        <button onclick="window.location.href = '/'"> Next </button>
+        <button  onclick="window.location.href = '/'"> Next </button>
     </ul>
 
 </body>

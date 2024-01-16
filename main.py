@@ -55,6 +55,26 @@ db = {
     "銀行": "bank",
 }
 
+correct_answers = 0
+wrong_answers = 0
+
+
+@app.get("/api/guess/{current_word}/{guess}")
+def checker(request: Request, guess: str, current_word):
+    global correct_answers
+    global wrong_answers
+
+    answer = db[current_word]
+    if guess == answer:
+        correct_answers += 1
+    else:
+        wrong_answers += 1
+    return {
+        "isCorrect": guess == answer,
+        "wrong_answers": wrong_answers,
+        "correct_answers": correct_answers,
+    }
+
 
 @app.get("/")
 async def root():
