@@ -7,8 +7,28 @@
 
             const color = myObject.isCorrect ? "green" : "red"
             currentButton.style.color = color
+            console.log("correct", myObject.correct_answers)
+            console.log("Wrong",myObject.wrong_answers)
+            const correct =  document.getElementById("correct")
+            const wrong = document.getElementById("wrong")
+
+            correct.innerHTML = `Correct: ${myObject.correct_answers}`
+            wrong.innerHTML = `Wrong: ${myObject.wrong_answers}`
+
+
+
         })
-        
+
+    }
+
+    const reset = async () => {
+        fetch('/api/reset').then(async (res) => {
+            const right = document.getElementById("correct");
+            const wrong = document.getElementById("wrong");
+            right.innerHTML = "Correct: 0"
+            wrong.innerHTML = "Wrong: 0"
+            console.log("reset")
+        })
     }
 
 </script>
@@ -26,8 +46,14 @@
     <ul>
     {% for item in guess_options %}
         <button id={{item}} onclick="makeGuess('{{item}}', '{{test_word}}')"> {{item}} </button>
+
     {% endfor %}
+    </ul>
+    <ul>
+        <button onclick="reset()"> Reset </button>
         <button  onclick="window.location.href = '/'"> Next </button>
+        <h1 id="correct">Correct: {{wrong_answers}}</h1>
+        <h1 id="wrong">Wrong: {{correct_answers}}</h1>
     </ul>
 
 </body>

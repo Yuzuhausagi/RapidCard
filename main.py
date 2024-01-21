@@ -59,6 +59,14 @@ correct_answers = 0
 wrong_answers = 0
 
 
+@app.get("/api/reset")
+def resetSession(request: Request):
+    global correct_answers
+    global wrong_answers
+    correct_answers = 0
+    wrong_answers = 0
+
+
 @app.get("/api/guess/{current_word}/{guess}")
 def checker(request: Request, guess: str, current_word):
     global correct_answers
@@ -87,8 +95,13 @@ def health(request: Request, test_param_example: str):
     return {"example": test_param_example}
 
 
+# http://127.0.0.1:1337/favicon.ico
 @app.get("/{test_word}", response_class=HTMLResponse)
 async def test_word(request: Request, test_word: str):
+    if test_word == "favicon.ico":
+        return None
+
+    print(test_word)
     random_falseword = random.choice(simple_words)
     random_falseword2 = random.choice(simple_words)
 
@@ -99,5 +112,10 @@ async def test_word(request: Request, test_word: str):
     return templates.TemplateResponse(
         request=request,
         name="item.html",
-        context={"test_word": test_word, "guess_options": guess_options},
+        context={
+            "test_word": test_word,
+            "guess_options": guess_options,
+            "correct_answers": correct_answers,
+            "wrong_answers": wrong_answers,
+        },
     )
