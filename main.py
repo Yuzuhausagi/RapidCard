@@ -59,6 +59,20 @@ correct_answers = 0
 wrong_answers = 0
 
 
+@app.post("/api/word/")
+async def addword(request: Request, formData: FlashCard):
+    db[formData.word] = formData.definition
+    print(db)
+
+
+@app.get("/newpage")
+async def add_word_page(request: Request, reponse_class=HTMLResponse):
+    return templates.TemplateResponse(
+        request=request,
+        name="newpage.html",
+    )
+
+
 @app.get("/api/reset")
 def resetSession(request: Request):
     global correct_answers

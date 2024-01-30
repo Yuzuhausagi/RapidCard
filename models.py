@@ -1,7 +1,6 @@
-from dataclasses import dataclass
+from pydantic import BaseModel
 
 
-@dataclass
-class FlashCard:
-    display_word: str
-    answer: str
+class FlashCard(BaseModel):
+    word: str
+    definition: str

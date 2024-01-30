@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Custom Word</title>
+</head>
+
+<script>
+
+    const submitData = async () => {
+        const wordEl = document.getElementById("word")
+        const defEl = document.getElementById("definition")
+        const wordData = {
+            word: wordEl.value,
+            definition: defEl.value
+        };
+
+        const url = "/api/word"
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(wordData)
+        })
+            .then(wordData => {
+                console.log('Success:', wordData);
+                wordEl.value = ""
+                defEl.value = ""
+            })
+    }
+
+</script>
+
+<body>
+    <label for="word">Add Word:</label><br>
+    <input type="text" id="word" name="word" value="Flagg"><br>
+    <label for="definition">Definition:</label><br>
+    <input type="text" id="definition" name="definition" value="Flag">
+    <button onclick="submitData()">add word</button>
+
+</body>
+
+
+</html>

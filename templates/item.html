@@ -29,6 +29,7 @@
             wrong.innerHTML = "Wrong: 0"
             console.log("reset")
         })
+        window.location.href = '/'
     }
 
 </script>
@@ -50,7 +51,7 @@
     {% endfor %}
     </ul>
     <ul>
-        <button onclick="reset()"> Reset </button>
+        <button onclick="reset()" > Reset </button>
         <button  onclick="window.location.href = '/'"> Next </button>
         <h1 id="correct">Correct: {{wrong_answers}}</h1>
         <h1 id="wrong">Wrong: {{correct_answers}}</h1>
