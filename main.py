@@ -88,6 +88,7 @@ def checker(request: Request, guess: str, current_word):
 
     answer = db[current_word]
     if guess == answer:
+        print(f"{current_word} {guess}")
         correct_answers += 1
     else:
         wrong_answers += 1
@@ -122,7 +123,7 @@ async def test_word(request: Request, test_word: str):
     answer = db[test_word]
     guess_options = [random_falseword, random_falseword2, answer]
     random.shuffle(guess_options)
-
+    print(correct_answers, wrong_answers)
     return templates.TemplateResponse(
         request=request,
         name="item.html",
