@@ -59,6 +59,9 @@ correct_answers = 0
 wrong_answers = 0
 
 
+wrong_counter = {}
+
+
 @app.post("/api/word/")
 async def addword(request: Request, formData: FlashCard):
     db[formData.word] = formData.definition
@@ -87,11 +90,16 @@ def checker(request: Request, guess: str, current_word):
     global wrong_answers
 
     answer = db[current_word]
+
+    for key in db.keys():
+        wrong_counter[key] = 0
+
     if guess == answer:
         print(f"{current_word} {guess}")
         correct_answers += 1
     else:
         wrong_answers += 1
+
     return {
         "isCorrect": guess == answer,
         "wrong_answers": wrong_answers,
@@ -101,6 +109,21 @@ def checker(request: Request, guess: str, current_word):
 
 @app.get("/")
 async def root():
+    # multiple_occurrences = False
+    # for occurrences in wrong_counter.values():
+    #     if occurrences > 1:
+    #         failed_word = random.choice(list(wrong_counter.keys()))
+    #         multiple_occurrences = True
+    #         break
+    #     else:
+    #         random_word = random.choice(list(db.keys()))
+    #
+    # if multiple_occurrences:
+    #     failed_word = random.choice(list(wrong_counter.keys()))
+    # else:
+    #     random_word = random.choice(list(db.keys()))
+    #
+    # selected_word = failed_word if multiple_occurrences else random_word
     random_word = random.choice(list(db.keys()))
     return RedirectResponse(f"/{random_word}")
 
