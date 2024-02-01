@@ -43,23 +43,30 @@ simple_words = [
 ]
 
 db = {
-    "車": "car",
     "上": "up",
     "下": "down",
-    "侍": "samurai",
-    "家族": "family",
-    "右": "right",
-    "左": "left",
-    "恋人": "lover",
-    "炎": "flame",
-    "銀行": "bank",
 }
+# db = {
+#     "車": "car",
+#     "上": "up",
+#     "下": "down",
+#     "侍": "samurai",
+#     "家族": "family",
+#     "右": "right",
+#     "左": "left",
+#     "恋人": "lover",
+#     "炎": "flame",
+#     "銀行": "bank",
+# }
 
 correct_answers = 0
 wrong_answers = 0
 
 
 wrong_counter = {}
+
+for key in db.keys():
+    wrong_counter[key] = 0
 
 
 @app.post("/api/word/")
@@ -91,14 +98,12 @@ def checker(request: Request, guess: str, current_word):
 
     answer = db[current_word]
 
-    for key in db.keys():
-        wrong_counter[key] = 0
-
     if guess == answer:
-        print(f"{current_word} {guess}")
         correct_answers += 1
+        wrong_counter[current_word] -= 1
     else:
         wrong_answers += 1
+        wrong_counter[current_word] += 1
 
     return {
         "isCorrect": guess == answer,
@@ -109,21 +114,6 @@ def checker(request: Request, guess: str, current_word):
 
 @app.get("/")
 async def root():
-    # multiple_occurrences = False
-    # for occurrences in wrong_counter.values():
-    #     if occurrences > 1:
-    #         failed_word = random.choice(list(wrong_counter.keys()))
-    #         multiple_occurrences = True
-    #         break
-    #     else:
-    #         random_word = random.choice(list(db.keys()))
-    #
-    # if multiple_occurrences:
-    #     failed_word = random.choice(list(wrong_counter.keys()))
-    # else:
-    #     random_word = random.choice(list(db.keys()))
-    #
-    # selected_word = failed_word if multiple_occurrences else random_word
     random_word = random.choice(list(db.keys()))
     return RedirectResponse(f"/{random_word}")
 
@@ -140,18 +130,29 @@ async def test_word(request: Request, test_word: str):
         return None
 
     print(test_word)
+    resulting_word = "test_word"
+
+    max_wrong_count = max(wrong_counter.values()) if wrong_counter else 0
+    print(wrong_counter)
+    print(max_wrong_count)
+    for word, count in wrong_counter.items():
+        if count == max_wrong_count:
+            resulting_word = word
+            print(f"Word with most wrong guesses: {word}, guessed wrong {count} times")
+
     random_falseword = random.choice(simple_words)
     random_falseword2 = random.choice(simple_words)
 
-    answer = db[test_word]
+    answer = db[resulting_word]
     guess_options = [random_falseword, random_falseword2, answer]
     random.shuffle(guess_options)
-    print(correct_answers, wrong_answers)
+    print(f' "correct"{correct_answers},"Wrong" {wrong_answers}')
+
     return templates.TemplateResponse(
         request=request,
         name="item.html",
         context={
-            "test_word": test_word,
+            "test_word": resulting_word,
             "guess_options": guess_options,
             "correct_answers": correct_answers,
             "wrong_answers": wrong_answers,
