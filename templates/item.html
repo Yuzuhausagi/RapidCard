@@ -1,61 +1,61 @@
 <html>
-<script>
-    const makeGuess = async (guess, word) => {
-        fetch(`/api/guess/${word}/${guess}`).then(async (res) => {
-            myObject = await res.json()
-            const currentButton = document.getElementById(guess)
+    <script>
+        const makeGuess = async (guess, word) => {
+            fetch(`/api/guess/${word}/${guess}`).then(async (res) => {
+                myObject = await res.json()
+                const currentButton = document.getElementById(guess)
 
-            const color = myObject.isCorrect ? "green" : "red"
-            currentButton.style.color = color
-            console.log("correct", myObject.correct_answers)
-            console.log("Wrong",myObject.wrong_answers)
-            const correct =  document.getElementById("correct")
-            const wrong = document.getElementById("wrong")
+                const color = myObject.isCorrect ? "green" : "red"
+                currentButton.style.color = color
+                console.log("correct", myObject.correct_answers)
+                console.log("Wrong",myObject.wrong_answers)
+                const correct =  document.getElementById("correct")
+                const wrong = document.getElementById("wrong")
 
-            correct.innerHTML = `Correct: ${myObject.correct_answers}`
-            wrong.innerHTML = `Wrong: ${myObject.wrong_answers}`
+                correct.innerHTML = `Correct: ${myObject.correct_answers}`
+                wrong.innerHTML = `Wrong: ${myObject.wrong_answers}`
 
 
 
-        })
+            })
 
-    }
+        }
 
-    const reset = async () => {
-        fetch('/api/reset').then(async (res) => {
-            const right = document.getElementById("correct");
-            const wrong = document.getElementById("wrong");
-            right.innerHTML = "Correct: 0"
-            wrong.innerHTML = "Wrong: 0"
-            console.log("reset")
-        })
-        window.location.href = '/'
-    }
+        const reset = async () => {
+            fetch('/api/reset').then(async (res) => {
+                const right = document.getElementById("correct");
+                const wrong = document.getElementById("wrong");
+                right.innerHTML = "Correct: 0"
+                wrong.innerHTML = "Wrong: 0"
+                console.log("reset")
+            })
+            window.location.href = '/'
+        }
 
-</script>
-<head>
-    <title>Item Details</title>
-    <link href="{{ url_for('static', path='/style.css') }}" rel="stylesheet">
-</head>
-<body>
-    <h1>
-        <a href="{{url_for('test_word', test_word=test_word) }}">Item ID: {{ test_word }}</a>
-    </h1>
-    <div>
-        <h2>{{test_word}}</h2>
-    </div>
-    <ul>
-    {% for item in guess_options %}
-        <button id={{item}} onclick="makeGuess('{{item}}', '{{test_word}}')"> {{item}} </button>
+    </script>
+    <head>
+        <title>Item Details</title>
+        <link href="{{ url_for('static', path='/style.css') }}" rel="stylesheet">
+    </head>
+    <body>
+        <h1>
+            <a href="{{url_for('test_word', test_word=test_word) }}">Item ID: {{ test_word }}</a>
+        </h1>
+        <div>
+            <h2>{{test_word}}</h2>
+        </div>
+        <ul>
+        {% for item in guess_options %}
+            <button id={{item}} onclick="makeGuess('{{item}}', '{{test_word}}')"> {{item}} </button>
 
-    {% endfor %}
-    </ul>
-    <ul>
-        <button onclick="reset()" > Reset </button>
-        <button  onclick="window.location.href = '/'"> Next </button>
-        <h1 id="correct">Correct: {{wrong_answers}}</h1>
-        <h1 id="wrong">Wrong: {{correct_answers}}</h1>
-    </ul>
+        {% endfor %}
+        </ul>
+        <ul>
+            <button onclick="reset()" > Reset </button>
+            <button  onclick="window.location.href = '/'"> Next </button>
+            <h1 id="correct">Correct: {{correct_answers}}</h1>
+            <h1 id="wrong">Wrong: {{wrong_answers}}</h1>
+        </ul>
 
-</body>
+    </body>
 </html>
