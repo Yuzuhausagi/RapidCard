@@ -7,6 +7,8 @@ from models import FlashCard
 import random
 
 
+# TODO: Change testword to root, implement difficulty, make the url display the matched character, failed words has a probablity to be shown often.
+
 app = FastAPI()
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -112,24 +114,14 @@ def checker(request: Request, guess: str, current_word):
     }
 
 
-@app.get("/")
-async def root():
-    random_word = random.choice(list(db.keys()))
-    return RedirectResponse(f"/{random_word}")
-
-
 @app.get("/healthcheck/{test_param_example}")
 def health(request: Request, test_param_example: str):
     return {"example": test_param_example}
 
 
 # http://127.0.0.1:1337/favicon.ico
-@app.get("/{test_word}", response_class=HTMLResponse)
-async def test_word(request: Request, test_word: str):
-    if test_word == "favicon.ico":
-        return None
-
-    print(test_word)
+@app.get("/", response_class=HTMLResponse)
+async def test_word(request: Request):
     resulting_word = "test_word"
 
     max_wrong_count = max(wrong_counter.values()) if wrong_counter else 0
