@@ -8,6 +8,7 @@ import random
 
 
 # TODO: Change testword to root, implement difficulty, make the url display the matched character, failed words has a probablity to be shown often.
+# TODO: Do some testing
 
 app = FastAPI()
 
@@ -44,22 +45,22 @@ simple_words = [
     "zebra",
 ]
 
-db = {
-    "上": "up",
-    "下": "down",
-}
 # db = {
-#     "車": "car",
 #     "上": "up",
 #     "下": "down",
-#     "侍": "samurai",
-#     "家族": "family",
-#     "右": "right",
-#     "左": "left",
-#     "恋人": "lover",
-#     "炎": "flame",
-#     "銀行": "bank",
 # }
+db = {
+    "車": "car",
+    "上": "up",
+    "下": "down",
+    "侍": "samurai",
+    "家族": "family",
+    "右": "right",
+    "左": "left",
+    "恋人": "lover",
+    "炎": "flame",
+    "銀行": "bank",
+}
 
 correct_answers = 0
 wrong_answers = 0
@@ -122,7 +123,7 @@ def health(request: Request, test_param_example: str):
 # http://127.0.0.1:1337/favicon.ico
 @app.get("/", response_class=HTMLResponse)
 async def test_word(request: Request):
-    resulting_word = "test_word"
+    resulting_word = "ERROR"
 
     max_wrong_count = max(wrong_counter.values()) if wrong_counter else 0
     print(wrong_counter)
@@ -134,6 +135,12 @@ async def test_word(request: Request):
 
     random_falseword = random.choice(simple_words)
     random_falseword2 = random.choice(simple_words)
+
+    x = random.randint(0, 1)
+    print(resulting_word)
+    if x == 0:
+        other_word = random.choice(list(db.keys()))
+        resulting_word = other_word
 
     answer = db[resulting_word]
     guess_options = [random_falseword, random_falseword2, answer]
