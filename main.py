@@ -45,10 +45,6 @@ simple_words = [
     "zebra",
 ]
 
-# db = {
-#     "上": "up",
-#     "下": "down",
-# }
 db = {
     "車": "car",
     "上": "up",
@@ -94,8 +90,8 @@ def resetSession(request: Request):
     wrong_answers = 0
 
 
-@app.get("/api/guess/{current_word}/{guess}")
-def checker(request: Request, guess: str, current_word):
+@app.get("/api/guess/{difficulty}/{current_word}/{guess}")
+def checker(request: Request, difficulty, guess: str, current_word):
     global correct_answers
     global wrong_answers
 
@@ -107,7 +103,7 @@ def checker(request: Request, guess: str, current_word):
     else:
         wrong_answers += 1
         wrong_counter[current_word] += 1
-
+    print(difficulty)
     return {
         "isCorrect": guess == answer,
         "wrong_answers": wrong_answers,

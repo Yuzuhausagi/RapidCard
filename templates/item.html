@@ -1,9 +1,10 @@
 <html>
     <script>
+        let currentDifficulty = "easy";
         const makeGuess = async (guess, word) => {
-            fetch(`/api/guess/${word}/${guess}`).then(async (res) => {
-                myObject = await res.json()
-                const currentButton = document.getElementById(guess)
+            fetch(`/api/guess/${currentDifficulty}/${word}/${guess}`).then(async (res) => {
+                myObject = await res.json();
+                const currentButton = document.getElementById(guess);
 
                 const color = myObject.isCorrect ? "green" : "red"
                 currentButton.style.color = color
@@ -38,6 +39,7 @@
             hardId.style.color = "black";
             selectedButton.style.color = "green";
 
+            currentDifficulty = difficulty;
         };
 
     </script>
@@ -59,7 +61,7 @@
             <button onclick="reset()" > Reset </button>
             <button id="hard" onclick="setDifficulty('hard')"> Hard </button>
             <button id="medium" onclick="setDifficulty('medium')"> Medium </button>
-            <button id="easy" onclick="setDifficulty('easy')"> Easy </button>
+            <button style="color: green" id="easy" onclick="setDifficulty('easy')"> Easy </button>
             <button  onclick="window.location.href = '/'"> Next </button>
             <h1 id="correct">Correct: {{correct_answers}}</h1>
             <h1 id="wrong">Wrong: {{wrong_answers}}</h1>
