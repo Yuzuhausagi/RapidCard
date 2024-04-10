@@ -14,11 +14,7 @@
 
                 correct.innerHTML = `Correct: ${myObject.correct_answers}`
                 wrong.innerHTML = `Wrong: ${myObject.wrong_answers}`
-
-
-
             })
-
         }
 
         const reset = async () => {
@@ -31,6 +27,18 @@
             })
             window.location.href = '/'
         }
+        const setDifficulty = async (difficulty) =>{
+            const easyId = document.getElementById("easy");
+            const midId = document.getElementById("medium");
+            const hardId = document.getElementById("hard");
+
+            const selectedButton = document.getElementById(difficulty);
+            easyId.style.color = "black";
+            midId.style.color = "black";
+            hardId.style.color = "black";
+            selectedButton.style.color = "green";
+
+        };
 
     </script>
     <head>
@@ -49,6 +57,9 @@
         </ul>
         <ul>
             <button onclick="reset()" > Reset </button>
+            <button id="hard" onclick="setDifficulty('hard')"> Hard </button>
+            <button id="medium" onclick="setDifficulty('medium')"> Medium </button>
+            <button id="easy" onclick="setDifficulty('easy')"> Easy </button>
             <button  onclick="window.location.href = '/'"> Next </button>
             <h1 id="correct">Correct: {{correct_answers}}</h1>
             <h1 id="wrong">Wrong: {{wrong_answers}}</h1>

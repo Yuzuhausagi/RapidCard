@@ -7,8 +7,8 @@ from models import FlashCard
 import random
 
 
-# TODO: Change testword to root, implement difficulty, make the url display the matched character, failed words has a probablity to be shown often.
-# TODO: Do some testing
+# TODO: implement difficulty, hard mode = button locked on wrong or right. Easy  mode = no locks
+# TODO: Do some testing next time
 
 app = FastAPI()
 
