@@ -7,7 +7,10 @@ from models import FlashCard, Difficulty
 import random
 
 
-# TODO: implement difficulty, hard mode = button locked on wrong or right. Easy  mode = no locks
+# TODO:  Easy  mode = no locks
+# TODO: Answer should not be on the right side always
+# TODO: fix the other difficulties
+
 # TODO: Do some testing next time
 
 app = FastAPI()
@@ -140,12 +143,7 @@ async def test_word(request: Request):
     random_falseword = random.choice(simple_words)
     random_falseword2 = random.choice(simple_words)
     random_falseword3 = random.choice(simple_words)
-    random_falseword4 = random.choice(simple_words)
-    random_falseword5 = random.choice(simple_words)
-    random_falseword6 = random.choice(simple_words)
-    random_falseword7 = random.choice(simple_words)
-    random_falseword8 = random.choice(simple_words)
-    random_falseword9 = random.choice(simple_words)
+
     x = random.randint(0, 1)
 
     print(resulting_word)
@@ -156,34 +154,18 @@ async def test_word(request: Request):
 
     guess_options = []
     answer = db[resulting_word]
+    random.shuffle(simple_words)
+
     if current_difficulty == "hard":
-        guess_options = [
-            random_falseword,
-            random_falseword2,
-            random_falseword3,
-            random_falseword4,
-            random_falseword5,
-            random_falseword6,
-            random_falseword7,
-            random_falseword8,
-            random_falseword9,
-            answer,
-        ]
-        random.shuffle(guess_options)
+        for i in range(10):
+            guess_options.append(simple_words[i])
+        guess_options.append(answer)
     elif current_difficulty == "medium":
-        guess_options = [
-            random_falseword,
-            random_falseword2,
-            random_falseword3,
-            random_falseword4,
-            random_falseword5,
-            random_falseword6,
-            answer,
-        ]
-        random.shuffle(guess_options)
+        for i in range(6):
+            guess_options.append(simple_words[i])
+        guess_options.append(answer)
     else:
         guess_options = [random_falseword, random_falseword2, random_falseword3, answer]
-        random.shuffle(guess_options)
 
     print(f' "correct"{correct_answers},"Wrong" {wrong_answers}')
     return templates.TemplateResponse(
