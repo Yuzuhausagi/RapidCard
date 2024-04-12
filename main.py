@@ -3,7 +3,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import RedirectResponse
-from models import FlashCard
+from models import FlashCard, Difficulty
 import random
 
 
@@ -60,7 +60,7 @@ db = {
 
 correct_answers = 0
 wrong_answers = 0
-
+current_difficulty = "easy"
 
 wrong_counter = {}
 
@@ -90,8 +90,15 @@ def resetSession(request: Request):
     wrong_answers = 0
 
 
-@app.get("/api/guess/{difficulty}/{current_word}/{guess}")
-def checker(request: Request, difficulty, guess: str, current_word):
+@app.post("/api/setDifficulty")
+def setDifficulty(formData: Difficulty):
+    global current_difficulty
+    current_difficulty = formData.difficulty
+    print(formData.difficulty)
+
+
+@app.get("/api/guess/{current_word}/{guess}")
+def checker(request: Request, guess: str, current_word):
     global correct_answers
     global wrong_answers
 
@@ -103,11 +110,12 @@ def checker(request: Request, difficulty, guess: str, current_word):
     else:
         wrong_answers += 1
         wrong_counter[current_word] += 1
-    print(difficulty)
+
     return {
         "isCorrect": guess == answer,
         "wrong_answers": wrong_answers,
         "correct_answers": correct_answers,
+        "current_difficulty": current_difficulty,
     }
 
 
@@ -142,7 +150,6 @@ async def test_word(request: Request):
     guess_options = [random_falseword, random_falseword2, answer]
     random.shuffle(guess_options)
     print(f' "correct"{correct_answers},"Wrong" {wrong_answers}')
-
     return templates.TemplateResponse(
         request=request,
         name="item.html",
@@ -151,5 +158,6 @@ async def test_word(request: Request):
             "guess_options": guess_options,
             "correct_answers": correct_answers,
             "wrong_answers": wrong_answers,
+            "current_difficulty": current_difficulty,
         },
     )
