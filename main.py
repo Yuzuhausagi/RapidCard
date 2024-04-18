@@ -154,18 +154,16 @@ async def test_word(request: Request):
     if current_difficulty == "hard":
         for i in range(10):
             guess_options.append(simple_words[i])
-        guess_options.append(answer)
-        random.shuffle(guess_options)
+
     elif current_difficulty == "medium":
         for i in range(6):
             guess_options.append(simple_words[i])
-        guess_options.append(answer)
-        random.shuffle(guess_options)
+
     else:
         for i in range(3):
             guess_options.append(simple_words[i])
-        guess_options.append(answer)
-        random.shuffle(guess_options)
+    guess_options.append(answer)
+    random.shuffle(guess_options)
 
     print(f' "correct"{correct_answers},"Wrong" {wrong_answers}')
     return templates.TemplateResponse(
