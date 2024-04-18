@@ -27,9 +27,8 @@
 
         }
 
-        let setDefaultColour = () => {
-
-            console.log();
+        let nextWord = () => {
+            window.location.href = '/'
         }
         const reset = async () => {
             fetch('/api/reset').then(async (res) => {
@@ -85,7 +84,7 @@
             <button style="color: {% if current_difficulty == 'hard' %}green{% else %}black{% endif %};" id="hard" onclick="setDifficulty('hard')"> Hard </button>
 
             <button onclick="reset()" > Reset </button>
-            <button id="next" onclick=""> Next </button>
+            <button id="next" onclick="nextWord()"> Next </button>
             <h1 id="correct">Correct: {{correct_answers}}</h1>
             <h1 id="wrong">Wrong: {{wrong_answers}}</h1>
         </ul>
