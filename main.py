@@ -8,7 +8,6 @@ import random
 
 
 # TODO:  Easy  mode = no locks
-# TODO: Answer should not be on the right side always
 # TODO: fix the other difficulties
 
 # TODO: Do some testing next time
@@ -140,10 +139,6 @@ async def test_word(request: Request):
             resulting_word = word
             print(f"Word with most wrong guesses: {word}, guessed wrong {count} times")
 
-    random_falseword = random.choice(simple_words)
-    random_falseword2 = random.choice(simple_words)
-    random_falseword3 = random.choice(simple_words)
-
     x = random.randint(0, 1)
 
     print(resulting_word)
@@ -160,12 +155,17 @@ async def test_word(request: Request):
         for i in range(10):
             guess_options.append(simple_words[i])
         guess_options.append(answer)
+        random.shuffle(guess_options)
     elif current_difficulty == "medium":
         for i in range(6):
             guess_options.append(simple_words[i])
         guess_options.append(answer)
+        random.shuffle(guess_options)
     else:
-        guess_options = [random_falseword, random_falseword2, random_falseword3, answer]
+        for i in range(3):
+            guess_options.append(simple_words[i])
+        guess_options.append(answer)
+        random.shuffle(guess_options)
 
     print(f' "correct"{correct_answers},"Wrong" {wrong_answers}')
     return templates.TemplateResponse(
