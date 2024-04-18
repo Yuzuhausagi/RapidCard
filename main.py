@@ -7,8 +7,7 @@ from models import FlashCard, Difficulty
 import random
 
 
-# TODO:  Easy  mode = no locks
-# TODO: fix the other difficulties
+# TODO: Make stuff into function in html make guess
 
 # TODO: Do some testing next time
 
@@ -117,6 +116,7 @@ def checker(request: Request, guess: str, current_word):
         "isCorrect": guess == answer,
         "wrong_answers": wrong_answers,
         "correct_answers": correct_answers,
+        "answer": answer,
         "current_difficulty": current_difficulty,
     }
 
