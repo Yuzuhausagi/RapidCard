@@ -1,6 +1,10 @@
 <html>
     <script>
         attempt = 3;
+        document.addEventListener("DOMContentLoaded", () => {
+            life = document.getElementById("lives");
+            life.innerHTML = `Attempt: ${attempt}`;
+        })
         const makeGuess = async (guess, word) => {
             fetch(`/api/guess/${word}/${guess}`).then(async (res) => {
                 myObject = await res.json();
@@ -27,6 +31,8 @@
                 }else if(myObject.current_difficulty === "medium"){
                     if(!myObject.isCorrect){
                         attempt--;
+                        life = document.getElementById("lives");
+                        life.innerHTML = `Attempt: ${attempt}`;
                         if(attempt === 0){
                             optionList = document.getElementById("option-list");
                             for(let i of optionList.children){
@@ -100,7 +106,6 @@
         <div>
             <h2>{{test_word}}</h2>
         </div>
-
         <ul id="option-list">
         {% for item in guess_options %}
             <button id={{item}} onclick="makeGuess('{{item}}','{{test_word}}')"> {{item}} </button>
@@ -117,5 +122,6 @@
             <h1 id="correct">Correct: {{correct_answers}}</h1>
             <h1 id="wrong">Wrong: {{wrong_answers}}</h1>
         </ul>
+        <h1 id="lives"> </h1>
     </body>
 </html>
