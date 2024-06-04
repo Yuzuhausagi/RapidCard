@@ -19,26 +19,23 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
 client = pymongo.MongoClient("localhost", 27017)
-db = client.words
-collection = db["false_words"]
+zxc = client.words
+collection = zxc["false_words"]
 data = collection.find()
 simple_words = []
 for i, v in enumerate(data):
     simple_words.append(v[str(i)])
 
+collection1 = zxc["Japanese_Answer"]
 
-db = {
-    "車": "car",
-    "上": "up",
-    "下": "down",
-    "侍": "samurai",
-    "家族": "family",
-    "右": "right",
-    "左": "left",
-    "恋人": "lover",
-    "炎": "flame",
-    "銀行": "bank",
-}
+jpwords = {}
+data1 = collection1.find()
+for d in data1:
+    keys = d.keys()
+    char = list(keys)[1]
+    v = d[char]
+    jpwords[char] = v
+
 
 correct_answers = 0
 wrong_answers = 0
@@ -46,14 +43,14 @@ current_difficulty = "easy"
 
 wrong_counter = {}
 
-for key in db.keys():
+for key in jpwords.keys():
     wrong_counter[key] = 0
 
 
 @app.post("/api/word/")
 async def addword(request: Request, formData: FlashCard):
-    db[formData.word] = formData.definition
-    print(db)
+    jpwords[formData.word] = formData.definition
+    print(jpwords)
 
 
 @app.get("/newpage")
@@ -84,7 +81,7 @@ def checker(request: Request, guess: str, current_word):
     global correct_answers
     global wrong_answers
 
-    answer = db[current_word]
+    answer = jpwords[current_word]
 
     if guess == answer:
         correct_answers += 1
@@ -125,11 +122,11 @@ async def test_word(request: Request):
     print(resulting_word)
 
     if x == 0:
-        other_word = random.choice(list(db.keys()))
+        other_word = random.choice(list(jpwords.keys()))
         resulting_word = other_word
 
     guess_options = []
-    answer = db[resulting_word]
+    answer = jpwords[resulting_word]
     random.shuffle(simple_words)
 
     if current_difficulty == "hard":
