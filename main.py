@@ -5,11 +5,12 @@ from fastapi.templating import Jinja2Templates
 from fastapi.responses import RedirectResponse
 from models import FlashCard, Difficulty
 import random
+import pymongo
 
 
-# TODO: Make stuff into function in html make guess
+# TODO: Put everything stored in the backend to a database. Work on user sessions
+# TODO: Styling happens in the end.
 
-# TODO: Do some testing next time
 
 app = FastAPI()
 
@@ -17,34 +18,14 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 templates = Jinja2Templates(directory="templates")
 
-simple_words = [
-    "apple",
-    "ball",
-    "cat",
-    "dog",
-    "egg",
-    "fish",
-    "goat",
-    "hat",
-    "ice",
-    "juice",
-    "kite",
-    "lion",
-    "mouse",
-    "nut",
-    "orange",
-    "pig",
-    "queen",
-    "rose",
-    "sun",
-    "tree",
-    "umbrella",
-    "vase",
-    "water",
-    "x-ray",
-    "yarn",
-    "zebra",
-]
+client = pymongo.MongoClient("localhost", 27017)
+db = client.words
+collection = db["false_words"]
+data = collection.find()
+simple_words = []
+for i, v in enumerate(data):
+    simple_words.append(v[str(i)])
+
 
 db = {
     "車": "car",

@@ -5,6 +5,9 @@
             life = document.getElementById("lives");
             life.innerHTML = `Attempt: ${attempt}`;
         })
+        document.addEventListener("mousemove", (e) => {
+            console.log("hello",e);
+        })
         const makeGuess = async (guess, word) => {
             fetch(`/api/guess/${word}/${guess}`).then(async (res) => {
                 myObject = await res.json();
